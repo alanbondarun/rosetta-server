@@ -11,6 +11,7 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 [libraries]
 spring-boot-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
 spring-boot-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
+postgresql = { module = "org.postgresql:postgresql", version = "42.7.4" }
 
 [bundles]
 spring = [ "spring-boot-data-jpa", "spring-boot-web" ]
