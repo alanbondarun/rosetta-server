@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.bundles.kotlin)
     implementation(libs.bundles.spring)
     implementation(libs.postgresql)
 }

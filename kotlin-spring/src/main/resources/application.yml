@@ -5,3 +5,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: rosetta
     password: g9fKklfPCrRivrqYYMltc48C
+  jpa:
+    hibernate:
+      ddl-auto: update
