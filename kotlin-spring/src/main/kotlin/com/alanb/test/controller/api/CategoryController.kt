@@ -2,7 +2,9 @@ package com.alanb.test.controller.api
 
 import com.alanb.test.business.CategoryService
 import com.alanb.test.controller.request.AddCategoryRequest
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,7 +19,12 @@ class CategoryController(
     fun getCategories() = categoryService.getCategories()
 
     @PostMapping("")
-    fun createCategory(
+    fun create(
         @RequestBody body: AddCategoryRequest,
     ) = categoryService.create(body)
+
+    @DeleteMapping("/{categoryId}")
+    fun delete(
+        @PathVariable categoryId: String,
+    ) = categoryService.delete(categoryId)
 }
