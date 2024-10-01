@@ -10,6 +10,5 @@ data class Category(
     @Id
     @Column(columnDefinition = "UUID")
     val id: UUID = UUID.randomUUID(),
-
     val name: String = "",
 )

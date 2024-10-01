@@ -14,12 +14,10 @@ class CategoryController(
     private val categoryService: CategoryService,
 ) {
     @GetMapping("")
-    fun getCategories() =
-        categoryService.getCategories()
+    fun getCategories() = categoryService.getCategories()
 
     @PostMapping("")
     fun createCategory(
-        @RequestBody body: AddCategoryRequest
-    ) =
-        categoryService.create(body)
+        @RequestBody body: AddCategoryRequest,
+    ) = categoryService.create(body)
 }

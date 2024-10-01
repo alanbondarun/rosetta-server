@@ -21,11 +21,12 @@ class CategoryService(
     }
 
     fun create(body: AddCategoryRequest): CategoryResponse {
-        val newCategory = categoryRepository.save(
-            Category(
-                name = body.name,
+        val newCategory =
+            categoryRepository.save(
+                Category(
+                    name = body.name,
+                ),
             )
-        )
 
         return CategoryResponse(
             id = newCategory.id.toString(),

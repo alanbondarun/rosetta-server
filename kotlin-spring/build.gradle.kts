@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.spring)
     alias(libs.plugins.kotlin.jpa)
     alias(libs.plugins.spring.boot)
+    alias(libs.plugins.ktlint)
 }
 
 group = "com.alanb.test"
