@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Self, Tuple
+from typing import Self, Tuple, Union
 
 from sqlalchemy import Row
 
@@ -12,5 +12,5 @@ class CategoryResponse:
     name: str
 
     @classmethod
-    def from_category(cls, category: Row[Tuple[Category]]) -> Self:
+    def from_category(cls, category: Union[Category, Row[Tuple[Category]]]) -> Self:
         return cls(id=str(category.id), name=category.name)
