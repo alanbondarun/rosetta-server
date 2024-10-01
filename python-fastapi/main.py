@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from database import Category, database_engine
 from request import AddCategoryRequest
-from response import CategoryResponse
+from response import CategoryResponse, DeleteCategoryResponse
 
 app = FastAPI()
 
@@ -31,3 +31,16 @@ def create_category(
         session.add(category)
         session.commit()
         return CategoryResponse.from_category(category)
+
+
+@app.delete("/category/{category_id}")
+def delete_category(
+    category_id: str,
+    database_connection: Annotated[Engine, Depends(database_engine)],
+):
+    with Session(database_connection) as session:
+        category = session.get(Category, category_id)
+        if category:
+            session.delete(category)
+            session.commit()
+        return DeleteCategoryResponse(is_deleted=bool(category))
