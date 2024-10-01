@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 fastapi = {extras = ["standard"], version = "==0.115.0"}
+sqlalchemy = "==2.0.35"
+psycopg2 = "==2.9.9"
 
 [dev-packages]
 ruff = "==0.6.8"
