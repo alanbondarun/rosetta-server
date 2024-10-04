@@ -13,9 +13,16 @@ app = FastAPI()
 
 
 @app.get("/category")
-def get_categories(database_connection: Annotated[Engine, Depends(database_engine)]):
+def get_categories(
+    database_connection: Annotated[Engine, Depends(database_engine)],
+    name: str | None = None,
+):
     with database_connection.connect() as connection:
         result = connection.execute(select(Category))
+        if name:
+            result = filter(
+                lambda category: name.lower() in category.name.lower(), result
+            )
         return list(
             map(lambda category: CategoryResponse.from_category(category), result)
         )
