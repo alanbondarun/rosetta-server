@@ -13,8 +13,11 @@ import java.util.UUID
 class BookmarkService(
     private val bookmarkRepository: BookmarkRepository,
 ) {
-    fun getBookmarks(): List<BookmarkResponse> {
+    fun getBookmarks(categoryId: String?): List<BookmarkResponse> {
         return bookmarkRepository.findAll()
+            .filter { bookmark ->
+                categoryId == null || bookmark.categories.any { it.id.toString() == categoryId }
+            }
             .map { BookmarkResponse.from(it) }
     }
 

@@ -12,8 +12,9 @@ import java.util.UUID
 class CategoryService(
     private val categoryRepository: CategoryRepository,
 ) {
-    fun getCategories(): List<CategoryResponse> {
+    fun getCategories(name: String?): List<CategoryResponse> {
         return categoryRepository.findAll()
+            .filter { name == null || it.name.lowercase().contains(name.lowercase()) }
             .map { category ->
                 CategoryResponse(
                     id = category.id.toString(),

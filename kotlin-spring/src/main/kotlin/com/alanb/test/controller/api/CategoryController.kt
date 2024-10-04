@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -16,7 +17,9 @@ class CategoryController(
     private val categoryService: CategoryService,
 ) {
     @GetMapping("")
-    fun getCategories() = categoryService.getCategories()
+    fun getCategories(
+        @RequestParam(required = false) name: String?,
+    ) = categoryService.getCategories(name)
 
     @PostMapping("")
     fun create(
