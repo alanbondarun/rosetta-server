@@ -21,10 +21,10 @@ data class Bookmark(
     @JoinTable(
         name = "BookmarkCategoryLink",
         joinColumns = [
-            JoinColumn(name = "categoryId"),
+            JoinColumn(name = "bookmarkId"),
         ],
         inverseJoinColumns = [
-            JoinColumn(name = "bookmarkId"),
+            JoinColumn(name = "categoryId"),
         ],
     )
     val categories: MutableSet<Category> = mutableSetOf(),
