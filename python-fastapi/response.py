@@ -1,11 +1,11 @@
 from dataclasses import dataclass
-from typing import Self, Tuple, Union
+from typing import List, Self, Tuple, Union
 
 from pydantic import AliasGenerator, BaseModel, ConfigDict
 from pydantic.alias_generators import to_camel
 from sqlalchemy import Row
 
-from database import Category
+from database import Bookmark, Category
 
 
 @dataclass
@@ -26,3 +26,24 @@ class DeleteCategoryResponse(BaseModel):
     )
 
     is_deleted: bool
+
+
+class BookmarkResponse(BaseModel):
+    id: str
+    name: str
+    url: str
+    categories: List[CategoryResponse]
+
+    @classmethod
+    def from_bookmark(cls, bookmark: Union[Bookmark, Row[Tuple[Bookmark]]]) -> Self:
+        return cls(
+            id=str(bookmark.id),
+            name=bookmark.name,
+            url=bookmark.url,
+            categories=list(
+                map(
+                    lambda category: CategoryResponse.from_category(category),
+                    bookmark.categories,
+                )
+            ),
+        )

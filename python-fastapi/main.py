@@ -2,12 +2,14 @@ from typing import Annotated
 from uuid import uuid4
 
 from fastapi import Depends, FastAPI
+from fastapi.params import Query
 from sqlalchemy import Engine, select
 from sqlalchemy.orm import Session
 
-from database import Category, database_engine
+from database import Bookmark, Category, database_engine
+from parameter import GetBookmarksParams
 from request import AddCategoryRequest
-from response import CategoryResponse, DeleteCategoryResponse
+from response import BookmarkResponse, CategoryResponse, DeleteCategoryResponse
 
 app = FastAPI()
 
@@ -51,3 +53,23 @@ def delete_category(
             session.delete(category)
             session.commit()
         return DeleteCategoryResponse(is_deleted=bool(category))
+
+
+@app.get("/bookmark")
+def get_bookmarks(
+    database_connection: Annotated[Engine, Depends(database_engine)],
+    params: Annotated[GetBookmarksParams, Query()],
+):
+    with Session(database_connection) as session:
+        bookmarks = session.query(Bookmark)
+        if params.category_id:
+            bookmarks = filter(
+                lambda bookmark: any(
+                    str(category.id) == params.category_id
+                    for category in bookmark.categories
+                ),
+                bookmarks,
+            )
+        return list(
+            map(lambda bookmark: BookmarkResponse.from_bookmark(bookmark), bookmarks)
+        )
