@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from database import Bookmark, Category, database_engine
 from parameter import GetBookmarksParams
-from request import AddCategoryRequest
+from request import AddBookmarkRequest, AddCategoryRequest
 from response import BookmarkResponse, CategoryResponse, DeleteCategoryResponse
 
 app = FastAPI()
@@ -73,3 +73,28 @@ def get_bookmarks(
         return list(
             map(lambda bookmark: BookmarkResponse.from_bookmark(bookmark), bookmarks)
         )
+
+
+@app.post("/bookmark")
+def create_bookmark(
+    request: AddBookmarkRequest,
+    database_connection: Annotated[Engine, Depends(database_engine)],
+):
+    with Session(database_connection) as session:
+        categories = list(
+            session.scalars(
+                select(Category).where(Category.id.in_(request.category_ids))
+            ).all()
+        )
+
+        bookmark = Bookmark(
+            id=str(uuid4()),
+            name=request.name,
+            url=request.url,
+            categories=categories,
+        )
+
+        session.add(bookmark)
+        session.commit()
+
+        return BookmarkResponse.from_bookmark(bookmark)
