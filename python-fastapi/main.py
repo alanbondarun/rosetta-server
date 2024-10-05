@@ -61,7 +61,7 @@ def get_bookmarks(
     params: Annotated[GetBookmarksParams, Query()],
 ):
     with Session(database_connection) as session:
-        bookmarks = session.query(Bookmark)
+        bookmarks = session.scalars(select(Bookmark)).all()
         if params.category_id:
             bookmarks = filter(
                 lambda bookmark: any(
