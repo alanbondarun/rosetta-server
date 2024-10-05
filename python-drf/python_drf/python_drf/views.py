@@ -1,5 +1,6 @@
 from uuid import uuid4
 
+from django.db.models import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -27,3 +28,13 @@ class CategoryList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CategoryDelete(APIView):
+    def delete(self, request: Request, id: str):
+        try:
+            category = Category.objects.get(pk=id)
+            category.delete()
+            return Response({"isDeleted": True})
+        except ObjectDoesNotExist:
+            return Response({"isDeleted": False})
