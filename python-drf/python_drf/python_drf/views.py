@@ -6,8 +6,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from python_drf.python_drf.models import Category
-from python_drf.python_drf.serializers import CategorySerializer
+from python_drf.python_drf.models import Bookmark, Category
+from python_drf.python_drf.serializers import BookmarkSerializer, CategorySerializer
 
 
 class CategoryList(APIView):
@@ -38,3 +38,18 @@ class CategoryDelete(APIView):
             return Response({"isDeleted": True})
         except ObjectDoesNotExist:
             return Response({"isDeleted": False})
+
+
+class BookmarkList(APIView):
+    def get(self, request: Request):
+        bookmarks = Bookmark.objects.all()
+        if request.query_params and request.query_params["categoryId"]:
+            bookmarks = filter(
+                lambda bookmark: any(
+                    str(category.id) == request.query_params["categoryId"]
+                    for category in bookmark.categories.all()
+                ),
+                bookmarks,
+            )
+        serializer = BookmarkSerializer(bookmarks, many=True)
+        return Response(serializer.data)
