@@ -47,3 +47,13 @@ class BookmarkResponse(BaseModel):
                 )
             ),
         )
+
+
+class DeleteBookmarkResponse(BaseModel):
+    model_config = ConfigDict(
+        alias_generator=AliasGenerator(
+            serialization_alias=lambda field_name: to_camel(field_name)
+        )
+    )
+
+    is_deleted: bool

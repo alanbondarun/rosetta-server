@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from database import Bookmark, Category, database_engine
 from parameter import GetBookmarksParams
 from request import AddBookmarkRequest, AddCategoryRequest
-from response import BookmarkResponse, CategoryResponse, DeleteCategoryResponse
+from response import BookmarkResponse, CategoryResponse, DeleteBookmarkResponse, DeleteCategoryResponse
 
 app = FastAPI()
 
@@ -98,3 +98,16 @@ def create_bookmark(
         session.commit()
 
         return BookmarkResponse.from_bookmark(bookmark)
+
+
+@app.delete("/bookmark/{bookmark_id}")
+def delete_bookmark(
+    bookmark_id: str,
+    database_connection: Annotated[Engine, Depends(database_engine)],
+):
+    with Session(database_connection) as session:
+        bookmark = session.get(Bookmark, bookmark_id)
+        if bookmark:
+            session.delete(bookmark)
+            session.commit()
+        return DeleteBookmarkResponse(is_deleted=bool(bookmark))
