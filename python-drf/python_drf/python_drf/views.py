@@ -1,3 +1,6 @@
+from uuid import uuid4
+
+from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,3 +20,10 @@ class CategoryList(APIView):
             )
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
+
+    def post(self, request: Request):
+        serializer = CategorySerializer(data={**request.data, "id": str(uuid4())})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
