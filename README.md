@@ -91,7 +91,7 @@
     "id": "<북마크 ID>",
     "name": "<북마크 이름>",
     "url": "<북마크 URL>",
-    "categoryIds": [
+    "categories": [
       {
         "id": "<카테고리 ID>",
         "name": "<카테고리 이름>"
