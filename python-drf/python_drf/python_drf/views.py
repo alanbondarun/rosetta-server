@@ -53,3 +53,25 @@ class BookmarkList(APIView):
             )
         serializer = BookmarkSerializer(bookmarks, many=True)
         return Response(serializer.data)
+
+    def post(self, request: Request):
+        categories = list(
+            map(
+                lambda category_id: {
+                    "id": category_id,
+                    "name": Category.objects.get(pk=category_id).name,
+                },
+                request.data["categoryIds"],
+            )
+        )
+        serializer = BookmarkSerializer(
+            data={
+                **request.data,
+                "id": str(uuid4()),
+                "categories": categories,
+            }
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
