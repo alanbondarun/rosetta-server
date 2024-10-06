@@ -15,7 +15,7 @@ class CategoryList(APIView):
         categories = Category.objects.all()
         if request.query_params and request.query_params["name"]:
             categories = filter(
-                lambda category: request.query_params["name"].lower()
+                lambda category: str(request.query_params["name"]).lower()
                 in category.name.lower(),
                 categories,
             )
