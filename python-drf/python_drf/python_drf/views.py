@@ -75,3 +75,13 @@ class BookmarkList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BookmarkDelete(APIView):
+    def delete(self, request: Request, id: str):
+        try:
+            category = Bookmark.objects.get(pk=id)
+            category.delete()
+            return Response({"isDeleted": True})
+        except ObjectDoesNotExist:
+            return Response({"isDeleted": False})
